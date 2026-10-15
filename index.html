@@ -3,47 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Manager AI</title>
+    <title>Stock Manager AI Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
-    <!-- Navbar -->
-    <nav class="border-b border-slate-800 bg-slate-900/50 p-4 flex justify-between items-center backdrop-blur">
-        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">📦 Stock Manager Pro</h1>
-        <button id="authBtn" onclick="toggleAuth()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-sm font-semibold rounded-lg transition">Login</button>
+    <!-- Top Bar -->
+    <nav class="border-b border-slate-800 bg-slate-900/80 p-4 flex justify-between items-center backdrop-blur">
+        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent flex items-center gap-2">
+            📦 Stock Manager Pro
+        </h1>
+        <div class="flex gap-3 items-center">
+            <span id="userStatus" class="text-xs text-slate-400">Logged Out</span>
+            <button id="authBtn" onclick="toggleAuth()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-xs font-semibold rounded-lg transition shadow-lg shadow-blue-500/20">Login</button>
+        </div>
     </nav>
 
-    <!-- Main Content Container -->
+    <!-- Main Dashboard -->
     <div class="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Stock Management Table -->
-        <div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+        <!-- Inventory List -->
+        <div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-semibold text-slate-200">Inventory Items</h2>
-                <button onclick="addProduct()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-md border border-slate-700">+ Add Product</button>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-100">Live Inventory</h2>
+                    <p class="text-xs text-slate-400">Manage products & current stock levels</p>
+                </div>
+                <button onclick="addProduct()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-xs font-semibold rounded-lg transition flex items-center gap-1">+ Add Item</button>
             </div>
+
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-400">
-                    <thead class="bg-slate-800/50 text-slate-300 uppercase text-xs">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-800/60 text-slate-400 uppercase text-[10px] tracking-wider">
                         <tr>
-                            <th class="p-3">Item Name</th>
+                            <th class="p-3 rounded-l-lg">Product Name</th>
                             <th class="p-3">SKU</th>
-                            <th class="p-3">Quantity</th>
-                            <th class="p-3">Price</th>
+                            <th class="p-3">Stock Quantity</th>
+                            <th class="p-3 rounded-r-lg">Unit Price</th>
                         </tr>
                     </thead>
-                    <tbody id="stockTable" class="divide-y divide-slate-800">
+                    <tbody id="stockTable" class="divide-y divide-slate-800/50">
                         <tr>
-                            <td class="p-3 text-slate-200">Laptop Table</td>
-                            <td class="p-3">LT-102</td>
-                            <td class="p-3 text-amber-400 font-semibold">5 (Low)</td>
-                            <td class="p-3">$25.00</td>
+                            <td class="p-3 font-medium text-slate-200">Multifunctional Laptop Table</td>
+                            <td class="p-3 text-slate-500 text-xs">LT-102</td>
+                            <td class="p-3"><span class="px-2 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-md text-xs font-semibold">5 (Low Stock)</span></td>
+                            <td class="p-3 font-semibold text-slate-200">$25.00</td>
                         </tr>
                         <tr>
-                            <td class="p-3 text-slate-200">HD Wifi CCTV Camera</td>
-                            <td class="p-3">CAM-99</td>
-                            <td class="p-3 text-emerald-400 font-semibold">18</td>
-                            <td class="p-3">$45.00</td>
+                            <td class="p-3 font-medium text-slate-200">1080P Wifi Smart CCTV Camera</td>
+                            <td class="p-3 text-slate-500 text-xs">CAM-99</td>
+                            <td class="p-3"><span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md text-xs font-semibold">18 In Stock</span></td>
+                            <td class="p-3 font-semibold text-slate-200">$45.00</td>
                         </tr>
                     </tbody>
                 </table>
@@ -51,42 +60,51 @@
         </div>
 
         <!-- AI Assistant Sidebar -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between h-[450px] shadow-xl">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between h-[480px] shadow-2xl">
             <div>
-                <h3 class="text-sm font-bold text-slate-300 border-b border-slate-800 pb-3 flex items-center gap-2">
-                    🤖 Inventory AI Assistant
-                </h3>
-                <div id="chatBox" class="mt-4 space-y-3 h-64 overflow-y-auto pr-1 text-xs">
-                    <div class="bg-slate-800 p-3 rounded-lg border border-slate-700/50 text-slate-300">
-                        Hello! Main aapka AI Inventory Assistant hoon. Stock regarding kuch bhi pochein!
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">🤖 Gemini AI Assistant</h3>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                </div>
+                <div id="chatBox" class="mt-4 space-y-3 h-[320px] overflow-y-auto pr-1 text-xs">
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 text-slate-300">
+                        Hello Muhammad! Main aapka Stock AI Assistant hoon. Stock regarding kuch bhi pochein!
                     </div>
                 </div>
             </div>
+
             <div class="flex gap-2 pt-2 border-t border-slate-800">
-                <input id="chatInput" type="text" placeholder="e.g. Which stock is low?" class="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                <button onclick="sendAIQuery()" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-xs font-semibold rounded-md transition">Send</button>
+                <input id="chatInput" type="text" placeholder="e.g. Kaunsa stock kam hai?" class="flex-1 bg-slate-800/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <button onclick="sendAIQuery()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-xs font-semibold rounded-xl transition">Send</button>
             </div>
         </div>
     </div>
 
     <script>
+        let isLoggedIn = false;
         function toggleAuth() {
+            isLoggedIn = !isLoggedIn;
             const btn = document.getElementById('authBtn');
-            btn.innerText = btn.innerText === 'Login' ? 'Logout' : 'Login';
-            btn.classList.toggle('bg-red-600');
-            btn.classList.toggle('bg-blue-600');
+            const status = document.getElementById('userStatus');
+            btn.innerText = isLoggedIn ? 'Logout' : 'Login';
+            btn.className = isLoggedIn 
+                ? 'px-4 py-2 bg-rose-600 hover:bg-rose-700 text-xs font-semibold rounded-lg transition shadow-lg shadow-rose-500/20' 
+                : 'px-4 py-2 bg-blue-600 hover:bg-blue-700 text-xs font-semibold rounded-lg transition shadow-lg shadow-blue-500/20';
+            status.innerText = isLoggedIn ? 'Logged In (Admin)' : 'Logged Out';
+            status.className = isLoggedIn ? 'text-xs text-emerald-400 font-semibold' : 'text-xs text-slate-400';
         }
 
         function addProduct() {
-            const name = prompt("Enter product name:");
+            if(!isLoggedIn) { alert("Pehle Login karein!"); return; }
+            const name = prompt("Enter Product Name:");
             if (!name) return;
             const table = document.getElementById('stockTable');
             table.innerHTML += `
                 <tr>
-                    <td class="p-3 text-slate-200">${name}</td>
-                    <td class="p-3">SKU-NEW</td>
-                    <td class="p-3 text-emerald-400 font-semibold">10</td>
-                    <td class="p-3">$0.00</td>
+                    <td class="p-3 font-medium text-slate-200">${name}</td>
+                    <td class="p-3 text-slate-500 text-xs">SKU-NEW</td>
+                    <td class="p-3"><span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md text-xs font-semibold">10 In Stock</span></td>
+                    <td class="p-3 font-semibold text-slate-200">$0.00</td>
                 </tr>
             `;
         }
@@ -96,16 +114,16 @@
             const chat = document.getElementById('chatBox');
             if(!input.value.trim()) return;
 
-            chat.innerHTML += `<div class="bg-blue-600 text-white p-3 rounded-lg ml-auto max-w-[80%]">${input.value}</div>`;
-            const userMsg = input.value;
+            chat.innerHTML += `<div class="bg-blue-600 text-white p-3 rounded-xl ml-auto max-w-[85%] shadow-md">${input.value}</div>`;
+            const userText = input.value;
             input.value = '';
 
             setTimeout(() => {
-                chat.innerHTML += `<div class="bg-slate-800 p-3 rounded-lg border border-slate-700/50 text-slate-300">
-                    Aapke pass <b>Laptop Table</b> ka stock kam hai (5 bache hain). Baaki inventory stable hai!
+                chat.innerHTML += `<div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 text-slate-300">
+                    Aapke pass <b>Multifunctional Laptop Table</b> ka stock kam bacha hai (5 items remaining). Iska restock order bana lein!
                 </div>`;
                 chat.scrollTop = chat.scrollHeight;
-            }, 600);
+            }, 500);
         }
     </script>
 </body>
