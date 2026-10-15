@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Manager AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+    <!-- Navbar -->
+    <nav class="border-b border-slate-800 bg-slate-900/50 p-4 flex justify-between items-center backdrop-blur">
+        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">📦 Stock Manager Pro</h1>
+        <button id="authBtn" onclick="toggleAuth()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-sm font-semibold rounded-lg transition">Login</button>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Stock Management Table -->
+        <div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-semibold text-slate-200">Inventory Items</h2>
+                <button onclick="addProduct()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-md border border-slate-700">+ Add Product</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-400">
+                    <thead class="bg-slate-800/50 text-slate-300 uppercase text-xs">
+                        <tr>
+                            <th class="p-3">Item Name</th>
+                            <th class="p-3">SKU</th>
+                            <th class="p-3">Quantity</th>
+                            <th class="p-3">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockTable" class="divide-y divide-slate-800">
+                        <tr>
+                            <td class="p-3 text-slate-200">Laptop Table</td>
+                            <td class="p-3">LT-102</td>
+                            <td class="p-3 text-amber-400 font-semibold">5 (Low)</td>
+                            <td class="p-3">$25.00</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 text-slate-200">HD Wifi CCTV Camera</td>
+                            <td class="p-3">CAM-99</td>
+                            <td class="p-3 text-emerald-400 font-semibold">18</td>
+                            <td class="p-3">$45.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- AI Assistant Sidebar -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between h-[450px] shadow-xl">
+            <div>
+                <h3 class="text-sm font-bold text-slate-300 border-b border-slate-800 pb-3 flex items-center gap-2">
+                    🤖 Inventory AI Assistant
+                </h3>
+                <div id="chatBox" class="mt-4 space-y-3 h-64 overflow-y-auto pr-1 text-xs">
+                    <div class="bg-slate-800 p-3 rounded-lg border border-slate-700/50 text-slate-300">
+                        Hello! Main aapka AI Inventory Assistant hoon. Stock regarding kuch bhi pochein!
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2 pt-2 border-t border-slate-800">
+                <input id="chatInput" type="text" placeholder="e.g. Which stock is low?" class="flex-1 bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <button onclick="sendAIQuery()" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-xs font-semibold rounded-md transition">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAuth() {
+            const btn = document.getElementById('authBtn');
+            btn.innerText = btn.innerText === 'Login' ? 'Logout' : 'Login';
+            btn.classList.toggle('bg-red-600');
+            btn.classList.toggle('bg-blue-600');
+        }
+
+        function addProduct() {
+            const name = prompt("Enter product name:");
+            if (!name) return;
+            const table = document.getElementById('stockTable');
+            table.innerHTML += `
+                <tr>
+                    <td class="p-3 text-slate-200">${name}</td>
+                    <td class="p-3">SKU-NEW</td>
+                    <td class="p-3 text-emerald-400 font-semibold">10</td>
+                    <td class="p-3">$0.00</td>
+                </tr>
+            `;
+        }
+
+        function sendAIQuery() {
+            const input = document.getElementById('chatInput');
+            const chat = document.getElementById('chatBox');
+            if(!input.value.trim()) return;
+
+            chat.innerHTML += `<div class="bg-blue-600 text-white p-3 rounded-lg ml-auto max-w-[80%]">${input.value}</div>`;
+            const userMsg = input.value;
+            input.value = '';
+
+            setTimeout(() => {
+                chat.innerHTML += `<div class="bg-slate-800 p-3 rounded-lg border border-slate-700/50 text-slate-300">
+                    Aapke pass <b>Laptop Table</b> ka stock kam hai (5 bache hain). Baaki inventory stable hai!
+                </div>`;
+                chat.scrollTop = chat.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>
